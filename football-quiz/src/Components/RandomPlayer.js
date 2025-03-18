@@ -11,7 +11,7 @@ const RandomPlayers = ({ players = [] }) => {
   const [userpost, setUserpost] = useState('');
   const [message, setMessage] = useState('');
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(30); // Temps de réponse (10 sec)
+  const [timeLeft, setTimeLeft] = useState(30); 
   const [revealed, setRevealed] = useState(false);
 
   useEffect(() => {
