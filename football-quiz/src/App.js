@@ -44,16 +44,24 @@ const App = () => {
   }
 
   // Récupération de tous les joueurs de toutes les équipes
-  const allPlayers = teams.flatMap(team => 
-    team.squad ? team.squad.map(player => ({
-      ...player,
-      teamName: team.name,
-      logo: team.crest,
-      position: player.position,
-      id: player.id,
-      shortName:player.shortName
-    })) : []
-  );
+  const allPlayers = teams.flatMap(team => {
+    if (!team.squad || !Array.isArray(team.squad)) {
+      console.warn(`Équipe sans squad : ${team.name}`);
+      return []; // Retourne un tableau vide si `squad` est manquant ou mal formé
+    }
+
+    return team.squad.map(player => {
+      // Vérifier si chaque propriété est définie
+      return {
+        ...player,
+        teamName: team.name || "Nom de l'équipe indisponible",
+        logo: team.crest || "URL du logo indisponible",
+        position: player.position || "Position non spécifiée",
+        id: player.id || "ID indisponible",
+        shortName: player.shortName || "Nom court indisponible"
+      };
+    });
+  });
 
   return (
     <div style={{
@@ -61,11 +69,9 @@ const App = () => {
       margin: 'auto', 
       padding: '20px',
       backgroundImage: 'url("https://img.freepik.com/photos-premium/stade-football-tribunes-pleines-fans-attendant-match-rendu-3d_207634-4954.jpg")',
-      // Remplacez par votre propre URL d'image
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed',
- 
       borderRadius: '10px',
       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
     }}>
@@ -88,7 +94,7 @@ const App = () => {
       </div>
 
       {/* Affichage des joueurs */}
-      <RandomPlayers players={allPlayers}  />
+      <RandomPlayers players={allPlayers} />
     </div>
   );
 };
